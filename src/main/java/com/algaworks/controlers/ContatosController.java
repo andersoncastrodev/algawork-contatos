@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ContatosController {
 
 	@GetMapping("/")
-	public String index() {
+	public String paginaInicial() {
 		return "index";
 	}
 }
