@@ -1,9 +1,12 @@
 package com.algaworks.controlers;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.algaworks.model.Contato;
@@ -30,14 +33,63 @@ public class ContatosController {
 	@GetMapping("/contatos")
 	public ModelAndView Listar() {
 		
-		ModelAndView andView = new ModelAndView("lista");
+		ModelAndView modelAndView = new ModelAndView("lista");
 		
-		andView.addObject("contatos", LISTA_CONTATOS);
+		modelAndView.addObject("contatos", LISTA_CONTATOS);
 		
-		return andView;
+		return modelAndView;
+	}
+	
+	@GetMapping("/contatos/novo")
+	public ModelAndView novo() {
+		
+		ModelAndView modelAndView = new ModelAndView("formulario");
+		
+		modelAndView.addObject("contato", new Contato() );
+		
+		return modelAndView;
+	}
+	
+	@PostMapping("/contatos")
+	public String cadastrar(Contato contato) {		
+		//Cria um codigo randomico 
+		String id = UUID.randomUUID().toString();
+		
+		//Seta o valor
+		contato.setId(id);
+		
+		LISTA_CONTATOS.add(contato);
+	
+		return "redirect:/contatos";
+	}
+	
+	@GetMapping("/contatos/{id}/editar")
+	public ModelAndView editar(@PathVariable String id) {
+			
+		ModelAndView modelAndView = new ModelAndView("formulario");
+		
+		Contato contato = procuraContato(id);
+		
+		modelAndView.addObject("contato", contato );
+		
+		return modelAndView;
 	}
 	
 	
+	public Contato procuraContato(String id) {
+		
+		for (int i = 0; i < LISTA_CONTATOS.size(); i++) {
+			
+			Contato contato = LISTA_CONTATOS.get(i);
+			
+			if(contato.getId().equals(id)) {
+				
+				return contato;
+			}
+			
+		}
+		return null;
+	}
 	
 	
 }

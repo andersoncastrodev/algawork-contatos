@@ -19,6 +19,11 @@ public class Contato {
 		this.telefone = telefone;
 	}
 	
+	//Usuando a conversao java is com operador primitivo boolean
+	public boolean isNovo() {
+		return id == null;
+	}
+	
 	public String getId() {
 		return id;
 	}
