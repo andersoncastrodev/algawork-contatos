@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.algaworks.model.Contato;
@@ -75,8 +77,31 @@ public class ContatosController {
 		return modelAndView;
 	}
 	
+	@PostMapping("/contatos/{id}")
+	public String atualizar(Contato contato) {
+		
+		Contato contatoVelho = procuraContato(contato.getId());
+		
+		LISTA_CONTATOS.remove(contatoVelho);
+		
+		LISTA_CONTATOS.add(contato);
+		
+		return "redirect:/contatos";
+	}
 	
-	public Contato procuraContato(String id) {
+	@DeleteMapping("/contatos/{id}")
+	public String deletar(@PathVariable String id) {
+		
+		Contato contato = procuraContato(id);
+		
+		LISTA_CONTATOS.remove(contato);
+		
+		return "redirect:/contatos";
+	}
+	
+	
+	// --------------------------- Metodos Auxiliares ---------------------------- //
+	private Contato procuraContato(String id) {
 		
 		for (int i = 0; i < LISTA_CONTATOS.size(); i++) {
 			
@@ -90,6 +115,8 @@ public class ContatosController {
 		}
 		return null;
 	}
+	
+	
 	
 	
 }
